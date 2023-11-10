@@ -469,3 +469,12 @@ LearningTDD/LearningTDD/obj/Debug/net6.0/staticwebassets/msbuild.build.LearningT
 LearningTDD/LearningTDD/obj/Debug/net6.0/staticwebassets/msbuild.buildMultiTargeting.LearningTDD.API.props
 LearningTDD/LearningTDD/obj/Debug/net6.0/staticwebassets/msbuild.buildTransitive.LearningTDD.API.props
 LearningTDD/LearningTDD/obj/project.nuget.cache
+LearningTDD/LearningTDD/obj/Debug/net6.0/LearningTDD.API.csproj.FileListAbsolute.txt
+LearningTDD/LearningTDD/obj/Debug/net6.0/LearningTDD.API.assets.cache
+LearningTDD/LearningTDD.Test/obj/Debug/net6.0/LearningTDD.Test.csproj.AssemblyReference.cache
+LearningTDD/LearningTDD.Test/obj/Debug/net6.0/LearningTDD.Test.assets.cache
+LearningTDD/LearningTDD.IOC/obj/Debug/net6.0/LearningTDD.IOC.csproj.AssemblyReference.cache
+LearningTDD/LearningTDD.IOC/obj/Debug/net6.0/LearningTDD.IOC.assets.cache
+LearningTDD/LearningTDD.InfraData/obj/Debug/net6.0/LearningTDD.InfraData.assets.cache
+LearningTDD/LearningTDD.Domain/obj/Debug/net6.0/LearningTDD.Domain.assets.cache
+LearningTDD/.vs/LearningTDD/v17/.suo

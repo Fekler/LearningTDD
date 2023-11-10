@@ -33,8 +33,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.csproj": {
-                "projectPath": "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.csproj"
+              "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.API.csproj": {
+                "projectPath": "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.API.csproj"
               }
             }
           }
@@ -90,12 +90,12 @@
         }
       }
     },
-    "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.csproj": {
+    "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.csproj",
-        "projectName": "LearningTDD",
-        "projectPath": "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.csproj",
+        "projectUniqueName": "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.API.csproj",
+        "projectName": "LearningTDD.API",
+        "projectPath": "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\LearningTDD.API.csproj",
         "packagesPath": "C:\\Users\\felipe-queiroz\\.nuget\\packages\\",
         "outputPath": "C:\\Dev\\LearningTDD\\LearningTDD\\LearningTDD\\obj\\",
         "projectStyle": "PackageReference",
@@ -135,7 +135,27 @@
               "target": "Package",
               "version": "[1.19.4, )"
             },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
             "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "Swashbuckle.AspNetCore.Newtonsoft": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "Swashbuckle.AspNetCore.Swagger": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerGen": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerUI": {
               "target": "Package",
               "version": "[6.5.0, )"
             }

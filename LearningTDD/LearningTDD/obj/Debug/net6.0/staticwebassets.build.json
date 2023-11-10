@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "v6UJfc7SPQzIIYY3tmKHvH57biHmw1iwDvg60tsXkOM=",
-  "Source": "LearningTDD",
-  "BasePath": "_content/LearningTDD",
+  "Hash": "Puwfpvtdz+ssshI9wlPIVC9u8/NhaKoThxqGk1s7jFI=",
+  "Source": "LearningTDD.API",
+  "BasePath": "_content/LearningTDD.API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

@@ -1,4 +1,8 @@
-﻿using LearningTDD.Controllers;
+﻿using LearningTDD.API.Business;
+using LearningTDD.API.Interfaces;
+using LearningTDD.API.Repository;
+using LearningTDD.Controllers;
+using LearningTDD.Domain.Interfaces;
 using Microsoft.OpenApi.Models;
 
 
@@ -13,9 +17,11 @@ namespace LearningTDD.API
         }
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllers().AddNewtonsoftJson();
             object p = services.AddControllersWithViews().AddNewtonsoftJson();
             services.AddSwaggerGen(c => { }).AddSwaggerGenNewtonsoftSupport();
+
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

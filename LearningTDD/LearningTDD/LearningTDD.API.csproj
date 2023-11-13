@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\LearningTDD.InfraData\LearningTDD.InfraData.csproj" />
   </ItemGroup>
 
 </Project>

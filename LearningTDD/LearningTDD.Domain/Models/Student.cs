@@ -1,4 +1,4 @@
-﻿using LearningTDD.Domain.Models.Base;
+﻿using LearningTDD.Domain.Models._Base;
 using LearningTDD.Domain.Validations;
 using System.Text.RegularExpressions;
 

@@ -1,4 +1,4 @@
-﻿namespace LearningTDD.Domain.Models.Base
+﻿namespace LearningTDD.Domain.Models._Base
 {
     public abstract class Entity
     {

@@ -6,7 +6,7 @@ namespace LearningTDD.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StudentController :ControllerBase
+    public class StudentController : ControllerBase
     {
         private readonly IStudent _business;
 

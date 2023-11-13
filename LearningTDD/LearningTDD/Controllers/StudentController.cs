@@ -1,6 +1,5 @@
-﻿using LearningTDD.API.Interfaces;
-using LearningTDD.Domain.DTO;
-using LearningTDD.Domain.Models;
+﻿using LearningTDD.Domain.DTO;
+using LearningTDD.InfraData.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningTDD.API.Controllers

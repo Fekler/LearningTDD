@@ -1,7 +1,7 @@
 ﻿using LearningTDD.Domain.Interfaces;
 using LearningTDD.Domain.Models;
 
-namespace LearningTDD.API.Repository
+namespace LearningTDD.InfraData.Repository
 {
     public class StudentRepository : IStudentRepository
     {

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LearningTDD.InfraData\LearningTDD.InfraData.csproj" />
+    <ProjectReference Include="..\LearningTDD.IOC\LearningTDD.IOC.csproj" />
   </ItemGroup>
 
 </Project>

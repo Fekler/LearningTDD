@@ -1,7 +1,7 @@
-﻿using LearningTDD.API.Business;
-using LearningTDD.API.Interfaces;
-using LearningTDD.API.Repository;
-using LearningTDD.Domain.Interfaces;
+﻿using LearningTDD.Domain.Interfaces;
+using LearningTDD.InfraData.Business;
+using LearningTDD.InfraData.Interfaces;
+using LearningTDD.InfraData.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

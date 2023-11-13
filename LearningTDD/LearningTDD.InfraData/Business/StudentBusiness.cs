@@ -1,8 +1,8 @@
-﻿using LearningTDD.API.Interfaces;
+﻿using LearningTDD.InfraData.Interfaces;
 using LearningTDD.Domain.Interfaces;
 using LearningTDD.Domain.Models;
 
-namespace LearningTDD.API.Business
+namespace LearningTDD.InfraData.Business
 {
     public class StudentBusiness : IStudent
     {

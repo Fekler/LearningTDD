@@ -1,6 +1,7 @@
 ﻿using LearningTDD.InfraData.Interfaces;
 using LearningTDD.Domain.Interfaces;
 using LearningTDD.Domain.Models;
+using LearningTDD.Domain.DTO;
 
 namespace LearningTDD.InfraData.Business
 {
@@ -15,30 +16,80 @@ namespace LearningTDD.InfraData.Business
 
         public async Task<int> Add(object entity)
         {
-            var result = await _repository.Add((Student)entity);
-            return result;
+            try
+            {
+                var item = (StudentDTO)entity;
+                Student studentToAdd = new(
+                    item.Id,
+                    item.Name,
+                    item.CPF,
+                    item.Email
+                    );
+                var result = await _repository.Add(studentToAdd);
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public async Task<bool> Delete(int id)
         {
-            var exists = await Get(id);
-            if (exists is null) 
+            try
             {
-                return false;
+                var exists = await Get(id);
+                if (exists is null)
+                {
+                    return false;
+                }
+                var deleted = await _repository.Delete(id);
+                return deleted;
             }
-            return true;
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public Task<Student> Get(int id)
         {
-            var exists = _repository.Get(id);
-            return exists;
+            try
+            {
+                var exists = _repository.Get(id);
+                return exists;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public async Task<bool> Update(object entity)
         {
-            var update = await _repository.Update((Student)entity);
-            return update;
+            try
+            {
+                var item = (StudentDTO)entity;
+                Student studentToUpdate = new(
+                    item.Id,
+                    item.Name,
+                    item.CPF,
+                    item.Email
+                    );
+                var result = await _repository.Update(studentToUpdate);
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

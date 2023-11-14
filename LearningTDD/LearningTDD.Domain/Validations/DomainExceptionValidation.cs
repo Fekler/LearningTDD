@@ -1,7 +1,7 @@
 ﻿namespace LearningTDD.Domain.Validations
 {
 
-    internal class DomainExceptionValidation : ArgumentException
+    public class DomainExceptionValidation : ArgumentException
     {
         internal string Error { get; set; }
 

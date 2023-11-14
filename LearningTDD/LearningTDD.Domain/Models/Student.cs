@@ -7,7 +7,7 @@ namespace LearningTDD.Domain.Models
     public class Student : Entity
     {
         private readonly int _nameMaxLength = 150;
-        private readonly int _cpfMaxLength = 11;
+        private readonly int _cpfMaxLength = 14;
 
         private readonly Regex _emailRegex = new(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
         private readonly Regex _cpfRegex = new(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$");
@@ -26,9 +26,9 @@ namespace LearningTDD.Domain.Models
         public Student(int? id, string name, string cpf, string email, DateTime? createIn = null)
         {
             //name = name.Trim();// = name.Trim();
-            var trimmedName = name.Trim();
-            var trimmedCpf = cpf.Trim();
-            var trimmedEmail = email.Trim();
+            var trimmedName = name?.Trim();
+            var trimmedCpf = cpf?.Trim();
+            var trimmedEmail = email?.Trim();
 
             RuleValidator.Build()
                 .When(id.HasValue && id <= 0, Error.ID)

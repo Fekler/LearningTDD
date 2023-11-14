@@ -3,7 +3,7 @@
     public record StudentDTO
     {   
         public int? Id ;
-        public string Nome ;
+        public string Name ;
         public string Email ;
         public string CPF ;
         public DateTime? CreateIn;

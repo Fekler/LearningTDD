@@ -20,7 +20,7 @@ namespace LearningTDD.InfraData.Business
             {
                 var item = (StudentDTO)entity;
                 Student studentToAdd = new(
-                    item.Id,
+                    item.Id = null,
                     item.Name,
                     item.CPF,
                     item.Email

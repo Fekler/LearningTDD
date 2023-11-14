@@ -6,6 +6,7 @@ using LearningTDD.Domain.Interfaces;
 using LearningTDD.Domain.Models;
 using LearningTDD.InfraData.Business;
 using LearningTDD.InfraData.Interfaces;
+using LearningTDD.InfraData.Repository;
 using Moq;
 
 namespace LearningTDD.Test.Business
@@ -41,14 +42,13 @@ namespace LearningTDD.Test.Business
         [Fact]
         public async void ShouldGetStudent()
         {
-            Student student = new(null, _dto.Name, _dto.CPF, _dto.Email)
-            {
-            };
+            Student student = new(null, _dto.Name, _dto.CPF, _dto.Email);
+
             await _business.Add(_dto);
             _repository.Setup(r => r.Get(0)).ReturnsAsync(student);
             var studentToCompare = await _business.Get(0);
             /*_action = () => */
-            bool isEquals = studentToCompare.Equals(student);
+            //bool isEquals = studentToCompare.Equals(student);
             Assert.True(studentToCompare.Equals(student));
         }
 

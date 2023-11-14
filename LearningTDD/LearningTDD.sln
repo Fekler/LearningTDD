@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTDD.Domain", "Learn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTDD.IOC", "LearningTDD.IOC\LearningTDD.IOC.csproj", "{08F2DD6B-913D-4386-89AA-22722E21E507}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningTDD.InfraData", "LearningTDD.InfraData\LearningTDD.InfraData.csproj", "{279338BA-54E1-4182-B224-59C759A00AF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTDD.InfraData", "LearningTDD.InfraData\LearningTDD.InfraData.csproj", "{279338BA-54E1-4182-B224-59C759A00AF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

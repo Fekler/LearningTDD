@@ -1,36 +1,62 @@
 ﻿using LearningTDD.Domain.Interfaces._Base;
+using LearningTDD.Domain.Models;
 using LearningTDD.Domain.Models._Base;
 using System.Data;
+using static Dapper.SqlMapper;
 
 namespace LearningTDD.InfraData.Repository
 {
     public abstract class BaseRepository<T> : IBaseOperations<T> where T : Entity 
     {
-        protected readonly IDbConnection _connection;
+        private List<T> _entities;
 
-        protected BaseRepository(IDbConnection connection)
+        public BaseRepository()
         {
-            _connection = connection;
+            _entities = new();
         }
 
-        public Task<int> Add(T entity)
+        public async Task<int> Add(T entity)
         {
-            throw new NotImplementedException();
+            if (_entities.Count == 0)
+            {
+                entity.Id = 1;
+            }
+            else
+            {
+                var lastStudent = _entities.Last();
+                entity.Id = lastStudent.Id + 1;
+            }
+
+            _entities.Add(entity);
+
+            return entity.Id;
         }
 
-        public Task<bool> Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            throw new NotImplementedException();
+            var entity = _entities.FirstOrDefault(s => s.Id == id);
+            var result = entity is not null;
+            if (result)
+                _entities.Remove(entity);
+            return result;
         }
 
-        public Task<T> Get(int id)
+        public async Task<T> Get(int id)
         {
-            throw new NotImplementedException();
+            var result = _entities.FirstOrDefault(s => s.Id == id);
+            return result;
         }
 
-        public Task<bool> Update(T entity)
+        public async Task<bool> Update(T entity)
         {
-            throw new NotImplementedException();
+            var listedEntity = _entities.FirstOrDefault(s => s.Id == entity.Id);
+            var result = entity is not null;
+            if (result)
+            {
+                _entities.Remove(listedEntity);
+                Add(entity);
+            }
+            return result;
         }
     }
 }

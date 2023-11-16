@@ -18,10 +18,6 @@ namespace LearningTDD.Domain.Models
         public DateTime CreateIn { get; private set; }
         public DateTime? UpdateIn { get; private set; }
 
-        public Student()
-        {
-
-        }
 
         public Student(int? id, string name, string cpf, string email, DateTime? createIn = null)
         {
@@ -31,7 +27,7 @@ namespace LearningTDD.Domain.Models
             var trimmedEmail = email?.Trim();
 
             RuleValidator.Build()
-                .When(id.HasValue && id <= 0, Error.ID)
+                .When(id.HasValue && id < 0, Error.ID)
                 .When(string.IsNullOrEmpty(trimmedName) || trimmedName.Length > _nameMaxLength, Error.NAME)
                 .When(string.IsNullOrEmpty(trimmedCpf) || !_cpfRegex.Match(trimmedCpf).Success || trimmedCpf.Length != _cpfMaxLength, Error.CPF)
                 .When(string.IsNullOrEmpty(trimmedEmail) || !_emailRegex.Match(trimmedEmail).Success, Error.EMAIL)
@@ -51,6 +47,11 @@ namespace LearningTDD.Domain.Models
             Name = trimmedName;
             CPF = trimmedCpf;
             Email = trimmedEmail;
+        }
+
+        public void ChangeName (string newName)
+        {
+            Name = newName;
         }
     }
 }

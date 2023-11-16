@@ -5,14 +5,9 @@ using LearningTDD.Domain.DTO;
 
 namespace LearningTDD.InfraData.Business
 {
-    public class StudentBusiness : IStudent
+    public class StudentBusiness(IStudentRepository repository) : IStudent
     {
-        private readonly IStudentRepository _repository;
-
-        public StudentBusiness(IStudentRepository repository)
-        {
-            _repository = repository;
-        }
+        private readonly IStudentRepository _repository = repository;
 
         public async Task<int> Add(object entity)
         {
@@ -23,9 +18,10 @@ namespace LearningTDD.InfraData.Business
                     item.Id = null,
                     item.Name,
                     item.CPF,
-                    item.Email
-                    );
+                    item.Email);
+
                 var result = await _repository.Add(studentToAdd);
+
                 return result;
             }
             catch (Exception)
@@ -80,8 +76,8 @@ namespace LearningTDD.InfraData.Business
                     item.Id,
                     item.Name,
                     item.CPF,
-                    item.Email
-                    );
+                    item.Email,
+                    item.CreateIn);
                 var result = await _repository.Update(studentToUpdate);
                 return result;
             }

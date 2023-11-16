@@ -11,8 +11,8 @@ namespace LearningTDD.IOC
     {
         public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IStudent, StudentBusiness>();
-            services.AddTransient<IStudentRepository, StudentRepository>();
+            services.AddSingleton<IStudent, StudentBusiness>();
+            services.AddSingleton<IStudentRepository, StudentRepository>();
 
         }
     }

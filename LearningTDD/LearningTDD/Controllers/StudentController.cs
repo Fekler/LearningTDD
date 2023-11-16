@@ -6,14 +6,9 @@ namespace LearningTDD.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StudentController : ControllerBase
+    public class StudentController(IStudent student) : ControllerBase
     {
-        private readonly IStudent _business;
-
-        public StudentController(IStudent student)
-        {
-            _business = student;
-        }
+        private readonly IStudent _business = student;
 
         [HttpPost, Route("[action]")]
         public async Task<IActionResult> Insert(StudentDTO student)

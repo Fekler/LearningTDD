@@ -22,7 +22,22 @@ namespace LearningTDD.Test.Unitary
             _action.Should().NotThrow();
 
         }
+        [Fact(DisplayName = "Change Student Name")]
+        public void ShouldChangeStudentName()
+        {
+            string newName = "New name";
 
+            Action action = () =>
+            {
+                var student = StudentBuilder.New().Build();
+                student.ChangeName(newName);
+                Assert.Equal(newName, student.Name);
+            };
+
+            action.Should().NotThrow();
+        }
+
+    
         [Theory]
         [InlineData("")]
         [InlineData(null)]
@@ -59,7 +74,7 @@ namespace LearningTDD.Test.Unitary
         }
 
         [Theory]
-        [InlineData(0)]
+        [InlineData(-1)]
         [InlineData(-50)]
         public void DoNotShouldCreateWithInvalidId(int invalidId)
         {

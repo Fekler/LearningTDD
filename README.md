@@ -11,4 +11,4 @@ Projeto Pessoal seguindo diretrizes do curso Test-Driven Development (TDD) com x
 1. Arquitetura Onion (API .NET Core).
 1. Padrão Repository.
 
-![TestsStatus](https://github.com/Fekler/LearningTDD/assets/126706967/a9ddbe28-37fa-4594-99e1-519f90b20e74)
+![TestsStatus](https://github.com/Fekler/LearningTDD/assets/126706967/61f6dd25-fe51-4e0a-8444-7706e81a53f4)

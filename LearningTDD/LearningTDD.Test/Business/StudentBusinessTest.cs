@@ -3,6 +3,7 @@ using Bogus.Extensions.Brazil;
 using LearningTDD.Domain.DTO;
 using LearningTDD.Domain.Interfaces;
 using LearningTDD.Domain.Models;
+using LearningTDD.Domain.Validations;
 using LearningTDD.InfraData.Business;
 using Moq;
 
@@ -39,6 +40,18 @@ namespace LearningTDD.Test.Business
         }
 
         [Fact]
+        public async void ShouldNotAddStudent()
+        {
+            _dto.Email = "emailerrado.com";
+            await Assert.ThrowsAsync<DomainExceptionValidation>(async () =>
+            {
+                // Chama o método que você espera que lance a exceção
+                var studentId = await _business.Add(_dto);
+            });
+            _repository.Verify(r => r.Add(It.IsAny<Student>()), Times.Never);
+        }
+
+        [Fact]
         public async void ShouldGetStudent()
         {
             Student student = new(null, _dto.Name, _dto.CPF, _dto.Email);
@@ -48,6 +61,19 @@ namespace LearningTDD.Test.Business
             var studentToCompare = await _business.Get(studentId);
 
             Assert.True(studentToCompare.Equals(student));
+        }
+
+        [Fact]
+        public async void ShouldNotGetStudent()
+        {
+            Student student = new(null, _dto.Name, _dto.CPF, _dto.Email);
+
+            var studentId = await _business.Add(_dto);
+            _repository.Setup(r => r.Get(studentId)).ReturnsAsync(student);
+            int randomNumber = _faker.Random.Int(studentId+1);
+            var studentToCompare = await _business.Get(randomNumber);
+
+            Assert.False(student.Equals(studentToCompare));
         }
 
         [Fact]
@@ -64,6 +90,23 @@ namespace LearningTDD.Test.Business
             _repository.Verify(r => r.Delete(studentId), Times.Once);
 
             Assert.True(isDeleted);
+        }
+
+        [Fact]
+        public async void ShouldNotDeleteStudent()
+        {
+            Student student = new(null, _dto.Name, _dto.CPF, _dto.Email);
+
+            var studentId = await _business.Add(_dto);
+            _repository.Setup(r => r.Delete(studentId)).ReturnsAsync(true);
+            _repository.Setup(r => r.Get(studentId)).ReturnsAsync(student);
+            int randomNumber = _faker.Random.Int(studentId + 1);
+
+            var isDeleted = await _business.Delete(randomNumber);
+
+            _repository.Verify(r => r.Delete(studentId), Times.Never);
+
+            Assert.False(isDeleted);
         }
 
         [Fact]
@@ -85,6 +128,30 @@ namespace LearningTDD.Test.Business
 
             _repository.Verify(r => r.Update(It.IsAny<Student>()), Times.Once);
              Assert.True(isUpdated);
+        }
+
+        [Fact]
+        public async Task ShouldNotUpdateStudent()
+        {
+            Student student = new(null, _dto.Name, _dto.CPF, _dto.Email);
+            string studentWrongEmail = "wrongmail.com";
+
+            var studentId = await _business.Add(_dto);
+            _dto.Email = studentWrongEmail;
+            _dto.Id = studentId;
+
+            _repository.Setup(r => r.Update(It.IsAny<Student>())).ReturnsAsync(true);
+
+            bool updated = false;
+
+            await Assert.ThrowsAsync<DomainExceptionValidation>(async () =>
+            {
+                // Chama o método que você espera que lance a exceção
+                updated = await _business.Update(_dto);
+            });
+
+            _repository.Verify(r => r.Update(It.IsAny<Student>()), Times.Never);
+            Assert.False(updated);
         }
 
     }

@@ -4,13 +4,13 @@ using System.Text.RegularExpressions;
 
 namespace LearningTDD.Domain.Models
 {
-    public class Student : Entity
+    public partial class Student : Entity
     {
         private readonly int _nameMaxLength = 150;
         private readonly int _cpfMaxLength = 14;
 
-        private readonly Regex _emailRegex = new(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-        private readonly Regex _cpfRegex = new(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$");
+        private readonly Regex _emailRegex = EmailValidator();
+        private readonly Regex _cpfRegex = CPFValidator();
 
         public string Name { get; private set; }
         public string CPF { get; private set; }
@@ -53,5 +53,10 @@ namespace LearningTDD.Domain.Models
         {
             Name = newName;
         }
+
+        [GeneratedRegex(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$")]
+        private static partial Regex CPFValidator();
+        [GeneratedRegex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")]
+        private static partial Regex EmailValidator();
     }
 }

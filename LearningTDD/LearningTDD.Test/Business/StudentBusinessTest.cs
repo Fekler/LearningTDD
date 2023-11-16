@@ -45,7 +45,6 @@ namespace LearningTDD.Test.Business
             _dto.Email = "emailerrado.com";
             await Assert.ThrowsAsync<DomainExceptionValidation>(async () =>
             {
-                // Chama o método que você espera que lance a exceção
                 var studentId = await _business.Add(_dto);
             });
             _repository.Verify(r => r.Add(It.IsAny<Student>()), Times.Never);
@@ -133,20 +132,18 @@ namespace LearningTDD.Test.Business
         [Fact]
         public async Task ShouldNotUpdateStudent()
         {
+            _repository.Setup(r => r.Update(It.IsAny<Student>())).ReturnsAsync(true);
             Student student = new(null, _dto.Name, _dto.CPF, _dto.Email);
-            string studentWrongEmail = "wrongmail.com";
 
             var studentId = await _business.Add(_dto);
+            string studentWrongEmail = "wrongmail.com";
             _dto.Email = studentWrongEmail;
             _dto.Id = studentId;
-
-            _repository.Setup(r => r.Update(It.IsAny<Student>())).ReturnsAsync(true);
 
             bool updated = false;
 
             await Assert.ThrowsAsync<DomainExceptionValidation>(async () =>
             {
-                // Chama o método que você espera que lance a exceção
                 updated = await _business.Update(_dto);
             });
 

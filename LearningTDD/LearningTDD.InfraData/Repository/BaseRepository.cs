@@ -6,7 +6,7 @@ using static Dapper.SqlMapper;
 
 namespace LearningTDD.InfraData.Repository
 {
-    public abstract class BaseRepository<T> : IBaseOperations<T> where T : Entity 
+    public abstract class BaseRepository<T> : IBaseOperations<T> where T : Entity
     {
         private List<T> _entities;
 
@@ -34,29 +34,28 @@ namespace LearningTDD.InfraData.Repository
 
         public async Task<bool> Delete(int id)
         {
-            var entity = _entities.FirstOrDefault(s => s.Id == id);
-            var result = entity is not null;
-            if (result)
-                _entities.Remove(entity);
-            return result;
+            var entity = _entities.FirstOrDefault(e => e.Id == id);
+            if (entity is null)
+                return false;
+
+            _entities.Remove(entity);
+            return true;
         }
 
         public async Task<T> Get(int id)
         {
-            var result = _entities.FirstOrDefault(s => s.Id == id);
+            var result = _entities.FirstOrDefault(e => e.Id == id);
             return result;
         }
 
         public async Task<bool> Update(T entity)
         {
-            var listedEntity = _entities.FirstOrDefault(s => s.Id == entity.Id);
-            var result = entity is not null;
-            if (result)
-            {
-                _entities.Remove(listedEntity);
-                Add(entity);
-            }
-            return result;
+            var listedEntity = _entities.FirstOrDefault(e => e.Id == entity.Id);
+            if (listedEntity is null)
+                return false;
+            _entities.Remove(listedEntity);
+            _ = await Add(entity);
+            return true;
         }
     }
 }

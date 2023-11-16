@@ -1,4 +1,14 @@
 # LearningTDD
 Projeto Pessoal seguindo diretrizes do curso Test-Driven Development (TDD) com xUnit para C# .NET Core, onde criei uma API com captura de dados e utilizando o conceito TDD onde todo código é criado em teste após se torna código funcional. utilizo xUnit testes unitarios, implemento conceitos de dominio e classes de serviço, implemento responsabilidades únicas padrão SOLID, utilização de inversão de dependencia , utilizo mocks ,utilização do bogus para gerar dados aleatórios.
 
-Linguagem Programação : C# ,Frameworks : .NET Core, Ferramentas xUnit, Mock,BOgus
+## Linguagem Programação : C# ,Frameworks : .NET Core, Ferramentas xUnit, Mock,Bogus
+1. Testes de unidade com xUnit.
+1. Testes end-to-end (E2E).
+1. Utilização de Mocks e Stubs e suas diferenças.
+1. Conceitos de domínio e classes de serviços.
+1. Princípio da Responsabilidade Única (Single Responsibility Principle).
+1. Princípio da Inversão de Dependência (Dependency Inversion Principle).
+1. Arquitetura Onion (API .NET Core).
+1. Padrão Repository.
+
+![TestsStatus](https://github.com/Fekler/LearningTDD/assets/126706967/a9ddbe28-37fa-4594-99e1-519f90b20e74)

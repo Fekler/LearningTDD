@@ -3,8 +3,7 @@ using LearningTDD.Domain.Models;
 
 namespace LearningTDD.InfraData.Repository
 {
-    public class StudentRepository  : BaseRepository<Student>, IStudentRepository
+    public class StudentRepository(AppDbContext context) : BaseRepository<Student>(context), IStudentRepository
     {
-      
     }
 }

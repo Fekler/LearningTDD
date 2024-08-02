@@ -18,6 +18,10 @@ namespace LearningTDD.Domain.Models
         public DateTime CreateIn { get; private set; }
         public DateTime? UpdateIn { get; private set; }
 
+        public Student()
+        {
+            
+        }
 
         public Student(int? id, string name, string cpf, string email, DateTime? createIn = null)
         {
@@ -38,10 +42,10 @@ namespace LearningTDD.Domain.Models
                 Id = id.Value;
                 if (createIn.HasValue)
                     CreateIn = createIn.Value;
-                UpdateIn = DateTime.Now;
+                UpdateIn = DateTime.UtcNow;
             }
             else
-                CreateIn = DateTime.Now;
+                CreateIn = DateTime.UtcNow;
 
 
             Name = trimmedName;

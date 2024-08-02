@@ -2,6 +2,7 @@
 using LearningTDD.Domain.Interfaces;
 using LearningTDD.Domain.Models;
 using LearningTDD.Domain.DTO;
+using LearningTDD.InfraData.Util;
 
 namespace LearningTDD.InfraData.Business
 {
@@ -9,83 +10,127 @@ namespace LearningTDD.InfraData.Business
     {
         private readonly IStudentRepository _repository = repository;
 
-        public async Task<int> Add(object entity)
+        public async Task<ApiResponse<int>> Add(object entity)
         {
+            ApiResponse<int> result = new() { Success = false, Message = $"{Constants.FailedToAdd} {nameof(Student)}" };
+            if (entity is null)
+            {
+                result.Message = Constants.EntityCannotBeNull;
+                return result;
+            }
+
             try
             {
                 var item = (StudentDTO)entity;
-                Student studentToAdd = new(
-                    item.Id = null,
-                    item.Name,
-                    item.CPF,
-                    item.Email);
+                var studentToAdd = StudentDtoToModel(item, added: false);
 
-                var result = await _repository.Add(studentToAdd);
-
-                return result;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-        }
-
-        public async Task<bool> Delete(int id)
-        {
-            try
-            {
-                var exists = await Get(id);
-                if (exists is null)
+                var id = await _repository.Add(studentToAdd);
+                if (id > 0)
                 {
-                    return false;
+                    result.Success = true;
+                    result.Data = id;
+                    result.Message = $"{nameof(Student)} {Constants.AddedSuccessfully}";
                 }
-                var deleted = await _repository.Delete(id);
-                return deleted;
-            }
-            catch (Exception)
-            {
 
-                throw;
             }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+
+            return result;
 
         }
 
-        public Task<Student> Get(int id)
+        public async Task<ApiResponse<bool>> Delete(int id)
         {
+            ApiResponse<bool> result = new() { Success = false, Message = $"{Constants.FailedToDelete} {nameof(Student)}" };
+
             try
             {
-                var exists = _repository.Get(id);
-                return exists;
+
+                var existsResponse = await Get(id);
+                if (existsResponse is null or { Success: false } or { Data: null })
+                {
+                    result.Message = existsResponse.Message;
+                    return result;
+                }
+
+                var deleted = await _repository.Delete(existsResponse.Data.Id);
+                if (deleted)
+                {
+                    result.Success = true;
+                    result.Data = deleted;
+                    result.Message = $"{nameof(Student)} {Constants.DeletedSuccessfully}";
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                result.Message = ex.Message;
             }
-
+            return result;
         }
 
-        public async Task<bool> Update(object entity)
+        public async Task<ApiResponse<Student>> Get(int id)
         {
+            ApiResponse<Student> result = new() { Success = false, Message = $"{nameof(Student)} {Constants.NotFound}" };
+            try
+            {
+                var student = await _repository.Get(id);
+                if (student is not null)
+                {
+                    result.Data = student;
+                    result.Success = true;
+                    result.Message = $"{nameof(Student)} {Constants.Found}";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
+        public async Task<ApiResponse<bool>> Update(object entity)
+        {
+            ApiResponse<bool> result = new() { Success = false, Message = $"{Constants.FailedToUpdate} {nameof(Student)}." };
+            if (entity is null)
+            {
+                result.Message = Constants.EntityCannotBeNull;
+                return result;
+            }
+
             try
             {
                 var item = (StudentDTO)entity;
-                Student studentToUpdate = new(
-                    item.Id,
-                    item.Name,
-                    item.CPF,
-                    item.Email,
-                    item.CreateIn);
-                var result = await _repository.Update(studentToUpdate);
-                return result;
-            }
-            catch (Exception)
-            {
+                Student studentToUpdate = StudentDtoToModel(item);
 
-                throw;
+                var updated = await _repository.Update(studentToUpdate);
+                if (updated)
+                {
+                    result.Success = true;
+                    result.Message = $"{studentToUpdate.GetType().Name} {Constants.UpdatedSuccessfully}";
+                    result.Data = updated;
+                }
+
             }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
         }
+
+        private static Student StudentDtoToModel(StudentDTO entity, bool added = true, string? name = null, string? cpf = null, string? email = null)
+        {
+            return new Student(
+                id: (added) ? entity.Id : null,
+                name: string.IsNullOrEmpty(name) ? entity.Name : name,
+                cpf: string.IsNullOrEmpty(cpf) ? entity.CPF : cpf,
+                email: string.IsNullOrEmpty(email) ? entity.Email : email,
+                createIn: (added) ? entity.CreateIn : null);
+        }
+
     }
 }

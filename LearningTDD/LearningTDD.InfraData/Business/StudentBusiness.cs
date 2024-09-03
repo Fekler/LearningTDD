@@ -12,7 +12,11 @@ namespace LearningTDD.InfraData.Business
 
         public async Task<ApiResponse<int>> Add(object entity)
         {
-            ApiResponse<int> result = new() { Success = false, Message = $"{Constants.FailedToAdd} {nameof(Student)}" };
+            ApiResponse<int> result = new() 
+            { 
+                Success = false,
+                Message = $"{Constants.FailedToAdd} {nameof(Student)}" 
+            };
             if (entity is null)
             {
                 result.Message = Constants.EntityCannotBeNull;

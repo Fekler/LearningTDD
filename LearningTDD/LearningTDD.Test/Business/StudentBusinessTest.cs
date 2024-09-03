@@ -36,30 +36,43 @@ namespace LearningTDD.Test.Business
         {
             var studentId = await _business.Add(_dto);
             _repository.Verify(r => r.Add(It.Is<Student>(s => s.Name == _dto.Name)));
-            Assert.True(studentId >= 0);
+            Assert.True(studentId.Data >= 0);
         }
 
         [Fact]
         public async void ShouldNotAddStudent()
         {
             _dto.Email = "emailerrado.com";
-            await Assert.ThrowsAsync<DomainExceptionValidation>(async () =>
+            //await Assert.ThrowsAsync<DomainExceptionValidation>(async () =>
+            //{
+            //    var studentId = await _business.Add(_dto);
+            //});
+            var exception = await Record.ExceptionAsync(async () =>
             {
-                var studentId = await _business.Add(_dto);
+                var response = await _business.Add(_dto);
+
+                Assert.False(response.Success);
+                Assert.Contains(Error.EMAIL, response.Message);
             });
+
+            // Assert
+            Assert.Null(exception); 
             _repository.Verify(r => r.Add(It.IsAny<Student>()), Times.Never);
         }
 
         [Fact]
         public async void ShouldGetStudent()
         {
-            Student student = new(null, _dto.Name, _dto.CPF, _dto.Email);
+            ApiResponse<Student> student = new()
+            {
+                Data = new(null, _dto.Name, _dto.CPF, _dto.Email)
+            };
 
             var studentId = await _business.Add(_dto);
-            _repository.Setup(r => r.Get(studentId)).ReturnsAsync(student);
-            var studentToCompare = await _business.Get(studentId);
+            _repository.Setup(r => r.Get(studentId.Data)).ReturnsAsync(student.Data);
+            var studentToCompare = await _business.Get(studentId.Data);
 
-            Assert.True(studentToCompare.Equals(student));
+            Assert.True(studentToCompare.Data.Equals(student.Data));
         }
 
         [Fact]
@@ -68,8 +81,8 @@ namespace LearningTDD.Test.Business
             Student student = new(null, _dto.Name, _dto.CPF, _dto.Email);
 
             var studentId = await _business.Add(_dto);
-            _repository.Setup(r => r.Get(studentId)).ReturnsAsync(student);
-            int randomNumber = _faker.Random.Int(studentId+1);
+            _repository.Setup(r => r.Get(studentId.Data)).ReturnsAsync(student);
+            int randomNumber = _faker.Random.Int(studentId.Data+1);
             var studentToCompare = await _business.Get(randomNumber);
 
             Assert.False(student.Equals(studentToCompare));
@@ -82,13 +95,13 @@ namespace LearningTDD.Test.Business
 
             var studentId = await _business.Add(_dto);
             _repository.Setup(r => r.Delete(It.IsAny<int>())).ReturnsAsync(true);
-            _repository.Setup(r => r.Get(studentId)).ReturnsAsync(student);
+            _repository.Setup(r => r.Get(studentId.Data)).ReturnsAsync(student);
 
-            var isDeleted = await _business.Delete(studentId);
+            var isDeleted = await _business.Delete(studentId.Data);
 
-            _repository.Verify(r => r.Delete(studentId), Times.Once);
+            _repository.Verify(r => r.Delete(studentId.Data), Times.Once);
 
-            Assert.True(isDeleted);
+            Assert.True(isDeleted.Data);
         }
 
         [Fact]
@@ -97,15 +110,15 @@ namespace LearningTDD.Test.Business
             Student student = new(null, _dto.Name, _dto.CPF, _dto.Email);
 
             var studentId = await _business.Add(_dto);
-            _repository.Setup(r => r.Delete(studentId)).ReturnsAsync(true);
-            _repository.Setup(r => r.Get(studentId)).ReturnsAsync(student);
-            int randomNumber = _faker.Random.Int(studentId + 1);
+            _repository.Setup(r => r.Delete(studentId.Data)).ReturnsAsync(true);
+            _repository.Setup(r => r.Get(studentId.Data)).ReturnsAsync(student);
+            int randomNumber = _faker.Random.Int(studentId.Data + 1);
 
             var isDeleted = await _business.Delete(randomNumber);
 
-            _repository.Verify(r => r.Delete(studentId), Times.Never);
+            _repository.Verify(r => r.Delete(studentId.Data), Times.Never);
 
-            Assert.False(isDeleted);
+            Assert.False(isDeleted.Data);
         }
 
         [Fact]
@@ -119,14 +132,14 @@ namespace LearningTDD.Test.Business
             _repository.Setup(r => r.Update(It.IsAny<Student>())).ReturnsAsync(true);
 
 
-            _dto.Id = studentId;
+            _dto.Id = studentId.Data;
             _dto.Name = studentNewName;
 
             var isUpdated = await _business.Update(_dto);
 
 
             _repository.Verify(r => r.Update(It.IsAny<Student>()), Times.Once);
-             Assert.True(isUpdated);
+             Assert.True(isUpdated.Data);
         }
 
         [Fact]
@@ -138,17 +151,31 @@ namespace LearningTDD.Test.Business
             var studentId = await _business.Add(_dto);
             string studentWrongEmail = "wrongmail.com";
             _dto.Email = studentWrongEmail;
-            _dto.Id = studentId;
+            _dto.Id = studentId.Data;
 
-            bool updated = false;
-
-            await Assert.ThrowsAsync<DomainExceptionValidation>(async () =>
+            ApiResponse<bool> updated = new()
             {
-                updated = await _business.Update(_dto);
+                Data = false
+            };
+
+            //await Assert.ThrowsAsync<DomainExceptionValidation>(async () =>
+            //{
+            //    updated = await _business.Update(_dto);
+            //});
+
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                var response = await _business.Update(_dto);
+
+                Assert.False(response.Success);
+                Assert.Contains(Error.EMAIL, response.Message);
             });
 
+            // Assert
+            Assert.Null(exception);
+
             _repository.Verify(r => r.Update(It.IsAny<Student>()), Times.Never);
-            Assert.False(updated);
+            Assert.False(updated.Data);
         }
 
     }

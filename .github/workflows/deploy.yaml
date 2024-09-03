@@ -56,6 +56,8 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
 
         script: |
+          echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u fekler --password-stdin
+
           # Atualizar a imagem Docker
           sudo docker pull ghcr.io/fekler/learningtdd/learningtdd:latest
 

@@ -7,8 +7,8 @@ EXPOSE 443
 # Use a imagem do SDK do .NET 8.0 para o build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["LearningTDD.API/LearningTDD.API.csproj", "LearningTDD.API/"]
-RUN dotnet restore "./LearningTDD.API/LearningTDD.API.csproj"
+COPY ["LearningTDD.API/LearningTDD.API.csproj", "./"]
+RUN dotnet restore "./LearningTDD.API.csproj"
 COPY . .
 WORKDIR "/src/LearningTDD.API"
 RUN dotnet build "LearningTDD.API.csproj" -c Release -o /app/build

@@ -48,11 +48,13 @@ jobs:
 
     steps:
     - name: Deploy para a VM via SSH
-      uses: appleboy/ssh-action@v0.1.17
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+
         script: |
           # Atualizar a imagem Docker
           docker pull ghcr.io/fekler/learningtdd/learningtdd:latest

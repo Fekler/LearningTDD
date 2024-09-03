@@ -8,8 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
-RUN dotnet restore "./LearningTDD.API/LearningTDD.API.csproj"
-COPY . .
+RUN dotnet restore "LearningTDD.API/LearningTDD.API.csproj"
 WORKDIR "/src/LearningTDD.API"
 RUN dotnet build "LearningTDD.API.csproj" -c Release -o /app/build
 

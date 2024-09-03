@@ -43,7 +43,7 @@ jobs:
     - name: Buildar a imagem Docker
       run: |
        docker buildx create --use
-       docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/fekler/learningtdd/learningtdd:latest -f lernintdd/Dockerfile lernintdd --push
+       docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/fekler/learningtdd/learningtdd:latest -f lerningtdd/Dockerfile lerningtdd --push
 
       # env:
       #   GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}

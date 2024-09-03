@@ -35,7 +35,7 @@ jobs:
       run: docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f LearningTDD/Dockerfile LearningTDD
 
     - name: login
-      run: docker login --username Fekler -- password ${{ secrets.GHCR_PAT }} ghcr.io
+      run: docker login --username Fekler --password ${{ secrets.GHCR_PAT }} ghcr.io
 
     - name: Push da imagem para o GitHub Packages
       run: docker push ghcr.io/fekler/learningtdd/learningtdd:latest

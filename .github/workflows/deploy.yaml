@@ -28,7 +28,7 @@ jobs:
       run: dotnet build --no-restore --configuration Release ./LearningTDD/LearningTDD.sln
 
     - name: Testar
-      run: dotnet test --no-build --verbosity normal ./LearningTDD/LearningTDD.Test/LearningTDD.Test.csproj
+      run: dotnet test --no-build --configuration Release --verbosity normal ./LearningTDD/LearningTDD.sln
 
     - name: Buildar a imagem Docker
       run: docker build -t ghcr.io/${{ github.repository }}/learningTdd:latest .

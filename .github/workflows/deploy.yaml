@@ -56,17 +56,16 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
 
         script: |
-          sudo su
 
           echo ${{ secrets.GHCR_DOWNLOAD }} | docker login ghcr.io -u fekler --password-stdin
 
           # Atualizar a imagem Docker
-          docker pull ghcr.io/fekler/learningtdd/learningtdd:latest
+          sudo docker pull ghcr.io/fekler/learningtdd/learningtdd:latest
 
           # Parar e remover o container existente, se houver
-          docker stop learningtdd || true
-          docker rm learningtdd || true
+          sudo docker stop learningtdd || true
+          sudo docker rm learningtdd || true
 
           # Rodar o novo container
-          docker run -d -p 8080:8080  --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest
+          sudo docker run -d -p 8080:8080  --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest
           exit

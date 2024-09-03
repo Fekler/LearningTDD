@@ -24,6 +24,8 @@
 
 //app.Run();
 
+using DotNetEnv;
+
 namespace LearningTDD.API
 
 {
@@ -31,6 +33,7 @@ namespace LearningTDD.API
     {
         public static void Main(string[] args)
         {
+            Env.Load();
             CreateHostBuilder(args).Build().Run();
         }
         public static IHostBuilder CreateHostBuilder(string[] args) =>

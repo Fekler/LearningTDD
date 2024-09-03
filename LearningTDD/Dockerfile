@@ -1,33 +1,21 @@
-# Use a base image for ASP.NET Core 8.0
+# Use a imagem base do ASP.NET Core 8.0
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-# Use a base image for the .NET SDK 8.0 for building
+# Use a imagem do SDK do .NET 8.0 para o build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-
-# Copy the entire project directory, including subdirectories
-COPY ../. .
-
-# Restore NuGet packages for the main project
-RUN dotnet restore "./LearningTDD.API/LearningTDD.API.csproj"
-
-# Copy the rest of the project files
 COPY . .
-
-# Set the working directory to the project directory
+RUN dotnet restore "./LearningTDD.API/LearningTDD.API.csproj"
+COPY . .
 WORKDIR "/src/LearningTDD.API"
-
-# Build the project
 RUN dotnet build "LearningTDD.API.csproj" -c Release -o /app/build
 
-# Create a publish stage
 FROM build AS publish
 RUN dotnet publish "LearningTDD.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# Final image based on the base image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .

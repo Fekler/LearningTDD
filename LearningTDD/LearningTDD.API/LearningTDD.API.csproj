@@ -24,4 +24,12 @@
     <ProjectReference Include="..\LearningTDD.IOC\LearningTDD.IOC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="..\.dockerignore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="..\.dockerignore" />
+  </ItemGroup>
+
 </Project>

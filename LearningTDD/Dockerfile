@@ -11,6 +11,9 @@ WORKDIR /src
 # Copy only the .csproj files and restore as distinct layers
 COPY ["LearningTDD.API/LearningTDD.API.csproj", "LearningTDD.API/"]
 COPY ["LearningTDD.IOC/LearningTDD.IOC.csproj", "LearningTDD.IOC/"]
+COPY ["LearningTDD.InfraData/LearningTDD.InfraData.csproj", "LearningTDD.InfraData/"]
+COPY ["LearningTDD.Domain/LearningTDD.Domain.csproj", "LearningTDD.Domain/"]
+
 RUN dotnet restore "LearningTDD.API/LearningTDD.API.csproj" --verbosity detailed
 
 # Copy the remaining source code

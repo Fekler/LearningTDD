@@ -40,10 +40,12 @@ jobs:
       uses: actions/checkout@latest
 
     - name: Configurar QEMU para builds multi-arquitetura
-      uses: docker/setup-qemu-action@latest
+      uses: docker/setup-qemu-action@v3.2.0
+
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@latest
+      uses: docker/setup-buildx-action@v3.6.1
+
 
     - name: Log in to GitHub Container Registry
       run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin

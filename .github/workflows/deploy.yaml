@@ -33,7 +33,7 @@ jobs:
     - name: Testar
       run: dotnet test --no-build --configuration Release --verbosity normal ./LearningTDD/LearningTDD.sln
 
-  build:
+  docker-build:
     runs-on: ubuntu-latest
 
     steps:

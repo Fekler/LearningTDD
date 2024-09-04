@@ -7,8 +7,7 @@ on:
 
 jobs:
   build:
-    # runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout do código
@@ -20,10 +19,9 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Set Environment Variables
-      run: echo "ENVIRONMENT=Development" >> $GITHUB_ENV
-       echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
-       
-
+      run: |
+        echo "ENVIRONMENT=Development" >> $GITHUB_ENV
+        echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
 
     - name: Restaurar dependências
       run: dotnet restore ./LearningTDD/LearningTDD.sln
@@ -35,8 +33,7 @@ jobs:
       run: dotnet test --no-build --configuration Release --verbosity normal ./LearningTDD/LearningTDD.sln
 
   docker-build:
-    # runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
@@ -59,13 +56,11 @@ jobs:
           --file LearningTDD/Dockerfile \
           --push \
           LearningTDD/
-          
+
   deploy:
-    # needs: build
     needs: docker-build
 
-    # runs-on: ubuntu-latest
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Deploy para a VM via SSH
@@ -75,18 +70,10 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
-
         script: |
-
           echo ${{ secrets.GHCR_DOWNLOAD }} | docker login ghcr.io -u fekler --password-stdin
-
-          # Atualizar a imagem Docker
           sudo docker pull ghcr.io/fekler/learningtdd/learningtdd:latest
-
-          # Parar e remover o container existente, se houver
           sudo docker stop learningtdd || true
           sudo docker rm learningtdd || true
-
-          # Rodar o novo container
-          sudo docker run -d -p 8080:8080  --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest
+          sudo docker run -d -p 8080:8080 --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest
           exit

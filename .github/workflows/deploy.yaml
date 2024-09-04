@@ -19,7 +19,10 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Set Environment Variables
-      run: echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
+      run: echo "ENVIRONMENT=Development" >> $GITHUB_ENV
+       echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
+       
+
 
     - name: Restaurar dependências
       run: dotnet restore ./LearningTDD/LearningTDD.sln
@@ -37,14 +40,14 @@ jobs:
     - name: login
       run: docker login --username Fekler --password ${{ secrets.GHCR_PAT }} ghcr.io
 
-    - name: Push da imagem para o GitHub Packages
-      run: docker push ghcr.io/fekler/learningtdd/learningtdd:latest
+    # - name: Push da imagem para o GitHub Packages
+    #   run: docker push ghcr.io/fekler/learningtdd/learningtdd:latest
 
-    #- name: Buildar a imagem Docker
-      #run: |
-       #docker buildx create --use
-       #docker buildx inspect --bootstrap
-      # docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/fekler/learningtdd/learningtdd:latest -f LearningTDD/Dockerfile LearningTDD --push
+    - name: Buildar a imagem Docker
+      run: |
+       docker buildx create --use
+       docker buildx inspect --bootstrap
+       docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/fekler/learningtdd/learningtdd:latest -f LearningTDD/Dockerfile LearningTDD --push
       # env:
       #   GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
 

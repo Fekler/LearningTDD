@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LearningTDD\LearningTDD.API.csproj" />
+    <ProjectReference Include="..\LearningTDD.API\LearningTDD.API.csproj" />
   </ItemGroup>
 
 </Project>

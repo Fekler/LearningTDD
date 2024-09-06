@@ -18,6 +18,12 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
+    - name: Instalar Docker
+      run: |
+        brew install --cask docker
+        open --background -a Docker
+        sleep 30  # Aguarda o Docker iniciar
+
     - name: Set Environment Variables
       run: |
         echo "ENVIRONMENT=Development" >> $GITHUB_ENV
@@ -50,7 +56,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
     - name: Deploy para a VM via SSH

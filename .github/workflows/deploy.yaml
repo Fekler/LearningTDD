@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: Ubuntu 24.04 by Arm Limited
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout do código
@@ -33,11 +33,15 @@ jobs:
       run: dotnet test --no-build --configuration Release --verbosity normal ./LearningTDD/LearningTDD.sln
 
   docker-build:
-    runs-on: Ubuntu 24.04 by Arm Limited
-
+    runs-on: macos-latest
+        
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+    - name: Set Environment Variables
+      run: |
+        echo "ENVIRONMENT=Development" >> $GITHUB_ENV
+        echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
 
     - name: Configurar QEMU para builds multi-arquitetura
       uses: docker/setup-qemu-action@v2
@@ -60,7 +64,7 @@ jobs:
   deploy:
     needs: docker-build
 
-    runs-on: Ubuntu 24.04 by Arm Limited
+    runs-on: ubuntu-latest
 
     steps:
     - name: Deploy para a VM via SSH

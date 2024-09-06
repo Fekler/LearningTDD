@@ -65,7 +65,7 @@ jobs:
           cp -r build-artifacts/* ~/build-artifacts/
           
           # Construir e executar o Docker container na VM
-          docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
-          docker stop learningtdd || true
-          docker rm learningtdd || true
-          docker run -d -p 8080:8080 --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest
+          sudo docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
+          sudo docker stop learningtdd || true
+          sudo docker rm learningtdd || true
+          sudo docker run -d -p 8080:8080 --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest

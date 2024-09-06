@@ -39,7 +39,7 @@ jobs:
         path: |
           ./LearningTDD/bin/Release
           ./LearningTDD/Dockerfile
-
+          
 
   deploy:
     needs: build
@@ -64,8 +64,14 @@ jobs:
           # Criar diretório para os artefatos
           mkdir -p ~/build-artifacts
     
+          # Verificar o conteúdo do diretório temporário onde os artefatos são baixados
+          ls -la /home/runner/work/_temp/build-artifacts/
+    
           # Copiar os artefatos para o diretório de trabalho
           cp -r /home/runner/work/_temp/build-artifacts/* ~/build-artifacts/
+    
+          # Verificar se os artefatos foram copiados corretamente
+          ls -la ~/build-artifacts/
     
           # Construir a imagem Docker
           sudo docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts

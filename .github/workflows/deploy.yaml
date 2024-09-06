@@ -58,7 +58,7 @@ jobs:
         script: |
           echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Fekler --password-stdin
           
-          # Copiar artefatos de build
+          # Copiar artefatos de build 
           mkdir -p ~/build-artifacts
           cp -r build-artifacts/* ~/build-artifacts/
 

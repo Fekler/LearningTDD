@@ -27,4 +27,9 @@ RUN dotnet publish "LearningTDD.API.csproj" -c Release -o /app/publish /p:UseApp
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Define variáveis de ambiente padrão (podem ser sobrescritas em tempo de execução)
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ConnectionStrings__DefaultConnection=
+
 ENTRYPOINT ["dotnet", "LearningTDD.API.dll"]

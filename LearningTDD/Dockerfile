@@ -8,15 +8,11 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy only the .csproj files and restore as distinct layers
-COPY ["LearningTDD.API/LearningTDD.API.csproj", "LearningTDD.API/"]
-COPY ["LearningTDD.IOC/LearningTDD.IOC.csproj", "LearningTDD.IOC/"]
-COPY ["LearningTDD.InfraData/LearningTDD.InfraData.csproj", "LearningTDD.InfraData/"]
-COPY ["LearningTDD.Domain/LearningTDD.Domain.csproj", "LearningTDD.Domain/"]
+# Copie apenas os arquivos .csproj e faça restore das dependências
+COPY . .
+RUN dotnet restore "LearningTDD.API/LearningTDD.API.csproj"
 
-RUN dotnet restore "LearningTDD.API/LearningTDD.API.csproj" --verbosity detailed
-
-# Copy the remaining source code
+# Copie o restante do código-fonte
 COPY . .
 WORKDIR "/src/LearningTDD.API"
 RUN dotnet build "LearningTDD.API.csproj" -c Release -o /app/build

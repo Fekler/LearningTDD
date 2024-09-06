@@ -31,7 +31,7 @@ jobs:
       run: |
         echo "ENVIRONMENT=Development" >> $GITHUB_ENV
         echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
-
+        
     - name: Arquivar artefatos de build
       uses: actions/upload-artifact@v3
       with:
@@ -39,6 +39,7 @@ jobs:
         path: |
           ./LearningTDD/bin/Release
           ./LearningTDD/Dockerfile
+
 
   deploy:
     needs: build
@@ -59,20 +60,20 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Fekler --password-stdin
-
+    
           # Criar diretório para os artefatos
           mkdir -p ~/build-artifacts
-
+    
           # Copiar os artefatos para o diretório de trabalho
-          cp -r build-artifacts/* ~/build-artifacts/
-
+          cp -r /home/runner/work/_temp/build-artifacts/* ~/build-artifacts/
+    
           # Construir a imagem Docker
           sudo docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
-
+    
           # Parar e remover o container existente, se houver
           sudo docker stop learningtdd || true
           sudo docker rm learningtdd || true
-
+    
           # Executar o container Docker com a variável de ambiente
           sudo docker run -d -p 8080:8080 --name learningtdd --network tdd_network \
             -e ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }} \

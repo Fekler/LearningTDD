@@ -20,9 +20,10 @@ jobs:
 
     - name: Instalar Docker
       run: |
-        brew install --cask docker
-        echo "Aguardando o Docker iniciar..."
-        sleep 30  # Aguarda o Docker iniciar
+        sudo apt-get update
+        sudo apt-get install -y docker.io
+        sudo systemctl start docker
+        sudo systemctl enable docker
 
     - name: Docker Setup Buildx
       uses: docker/setup-buildx-action@v2

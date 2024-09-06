@@ -68,4 +68,5 @@ jobs:
           sudo docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
           sudo docker stop learningtdd || true
           sudo docker rm learningtdd || true
-          sudo docker run -d -p 8080:8080 --name learningtdd --network tdd_network -e ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }} ghcr.io/fekler/learningtdd/learningtdd:latest
+          sudo docker run -d -p 8080:8080 --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest
+          sudo docker run -d -p 8080:8080 --name learningtdd  -e ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }} --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest

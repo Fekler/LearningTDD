@@ -21,8 +21,13 @@ jobs:
     - name: Instalar Docker
       run: |
         brew install --cask docker
-        open --background -a Docker
+        echo "Aguardando o Docker iniciar..."
         sleep 30  # Aguarda o Docker iniciar
+
+    - name: Verificar Docker
+      run: |
+        docker --version
+        docker info
 
     - name: Set Environment Variables
       run: |

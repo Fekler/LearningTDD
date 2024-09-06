@@ -60,16 +60,20 @@ jobs:
         script: |
           echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Fekler --password-stdin
 
-          # Copiar artefatos de build
+          # Criar diretório para os artefatos
           mkdir -p ~/build-artifacts
+
+          # Copiar os artefatos para o diretório de trabalho
           cp -r build-artifacts/* ~/build-artifacts/
-          
-          # Construir e executar o Docker container na VM
+
+          # Construir a imagem Docker
           sudo docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
 
-          # Definir variáveis de ambiente e executar o container
+          # Parar e remover o container existente, se houver
           sudo docker stop learningtdd || true
           sudo docker rm learningtdd || true
+
+          # Executar o container Docker com a variável de ambiente
           sudo docker run -d -p 8080:8080 --name learningtdd --network tdd_network \
             -e ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }} \
             ghcr.io/fekler/learningtdd/learningtdd:latest

@@ -68,4 +68,4 @@ jobs:
           sudo docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
           sudo docker stop learningtdd || true
           sudo docker rm learningtdd || true
-          ${{ secrets.DOCKER_RUN }}"
+          ${{ secrets.DOCKER_RUN }}

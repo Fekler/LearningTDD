@@ -36,7 +36,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: build-artifacts
-        path: ./LearningTDD/bin/Release
+        path: |
+          ./LearningTDD/bin/Release
+          ./LearningTDD/Dockerfile
 
   deploy:
     needs: build
@@ -58,10 +60,10 @@ jobs:
         script: |
           echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Fekler --password-stdin
           
-          # Copiar artefatos de build 
+          # Copiar artefatos de build
           mkdir -p ~/build-artifacts
           cp -r build-artifacts/* ~/build-artifacts/
-
+          
           # Construir e executar o Docker container na VM
           docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
           docker stop learningtdd || true

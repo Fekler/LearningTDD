@@ -18,28 +18,36 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Docker Setup Buildx
-      uses: docker/setup-buildx-action@v2
-      with:
-        buildkitd-flags: '--debug'
+    - name: Restaurar dependências
+      run: dotnet restore ./LearningTDD/LearningTDD.sln
 
-    - name: Docker Login
-      run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u Fekler --password-stdin
+    - name: Build
+      run: dotnet build --no-restore --configuration Release ./LearningTDD/LearningTDD.sln
 
-    - name: Build Docker Image for ARM64
-      uses: docker/build-push-action@v3
+    - name: Testar
+      run: dotnet test --no-build --configuration Release --verbosity normal ./LearningTDD/LearningTDD.sln
+
+    - name: Configurar variáveis de ambiente
+      run: |
+        echo "ENVIRONMENT=Development" >> $GITHUB_ENV
+        echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
+
+    - name: Arquivar artefatos de build
+      uses: actions/upload-artifact@v3
       with:
-        context: ./LearningTDD
-        file: ./LearningTDD/Dockerfile
-        push: true
-        tags: ghcr.io/fekler/learningtdd/learningtdd:latest
-        platforms: linux/arm64
+        name: build-artifacts
+        path: ./LearningTDD/bin/Release
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
+    - name: Baixar artefatos de build
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+
     - name: Deploy para a VM via SSH
       uses: appleboy/ssh-action@v0.2.0
       with:
@@ -49,7 +57,13 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Fekler --password-stdin
-          sudo docker pull ghcr.io/fekler/learningtdd/learningtdd:latest
-          sudo docker stop learningtdd || true
-          sudo docker rm learningtdd || true
-          sudo docker run -d -p 8080:8080 --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest
+          
+          # Copiar artefatos de build
+          mkdir -p ~/build-artifacts
+          cp -r build-artifacts/* ~/build-artifacts/
+
+          # Construir e executar o Docker container na VM
+          docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
+          docker stop learningtdd || true
+          docker rm learningtdd || true
+          docker run -d -p 8080:8080 --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest

@@ -59,13 +59,17 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Fekler --password-stdin
-          
+
           # Copiar artefatos de build
           mkdir -p ~/build-artifacts
           cp -r build-artifacts/* ~/build-artifacts/
           
           # Construir e executar o Docker container na VM
-          sudo docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
-          sudo docker stop learningtdd || true
-          sudo docker rm learningtdd || true
-          sudo docker run -d -p 8080:8080 --name learningtdd --network tdd_network ghcr.io/fekler/learningtdd/learningtdd:latest
+          docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
+
+          # Definir variáveis de ambiente e executar o container
+          docker stop learningtdd || true
+          docker rm learningtdd || true
+          docker run -d -p 8080:8080 --name learningtdd --network tdd_network \
+            -e ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }} \
+            ghcr.io/fekler/learningtdd/learningtdd:latest

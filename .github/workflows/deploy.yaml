@@ -40,25 +40,11 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          # Navegar para o diretório /var/api
-          if [ ! -d /var/api ]; then
-            sudo mkdir -p /var/api
-            sudo chown $USER:$USER /var/api
-          fi
-          cd /var/api/LearningTDD
-
-          # Clonar o repositório se ainda não estiver clonado
-          if [ ! -d /var/api/LearningTDD ]; then
-            sudo git clone https://github.com/Fekler/learningtdd.git LearningTDD
-          fi
-
-          # Navegar para o diretório do repositório
-
-          # Puxar as últimas alterações do repositório
+          cd /var/api/learningtdd
           sudo git pull origin main
-
-          # Construir e executar o Docker container na VM
-          sudo docker build -t learningtdd:latest -f LearningTDD/learningtdd/Dockerfile LearningTDD/learningtdd
-          sudo docker stop learningtdd || true
-          sudo docker rm learningtdd || true
-          sudo docker run -d --name learningtdd learningtdd:latest
+          cd LearningTDD
+          docker build -t learningtdd:latest .
+          
+          docker stop learningtdd || true
+          docker rm learningtdd || true
+          docker run -d --name learningtdd learningtdd:latest

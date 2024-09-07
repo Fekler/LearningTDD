@@ -3,6 +3,9 @@ name: CI/CD Pipeline
 on:
   pull_request:
     branches:
+      - '**'
+  push:
+    branches:
       - main
 
 jobs:
@@ -30,8 +33,17 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
     steps:
+    - name: Checkout do código
+      uses: actions/checkout@v3
+
+    - name: Configurar o .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
     - name: Deploy para a VM via SSH
       uses: appleboy/ssh-action@master
       with:
@@ -44,7 +56,7 @@ jobs:
           sudo git pull origin main
           cd LearningTDD
           docker build -t learningtdd:latest .
-          
+
           docker stop learningtdd || true
           docker rm learningtdd || true
-          docker run -d --name learningtdd learningtdd:latest
+          ${{ secrets.DOCKER_RUN }}

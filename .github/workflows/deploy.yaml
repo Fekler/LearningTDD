@@ -27,29 +27,11 @@ jobs:
     - name: Testar
       run: dotnet test --no-build --configuration Release --verbosity normal ./LearningTDD/LearningTDD.sln
 
-    - name: Configurar variáveis de ambiente
-      run: |
-        echo "ENVIRONMENT=Development" >> $GITHUB_ENV
-        echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
-
-    - name: Arquivar artefatos de build
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-artifacts
-        path: |
-          ./LearningTDD/bin/Release
-          ./LearningTDD/Dockerfile
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-    - name: Baixar artefatos de build
-      uses: actions/download-artifact@v3
-      with:
-        name: build-artifacts
-
     - name: Deploy para a VM via SSH
       uses: appleboy/ssh-action@master
       with:
@@ -58,14 +40,26 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Fekler --password-stdin
-          
-          # Copiar artefatos de build
-          mkdir -p ~/build-artifacts
-          cp -r build-artifacts/* ~/build-artifacts/
-          
+          # Navegar para o diretório /var/api
+          if [ ! -d /var/api ]; then
+            sudo mkdir -p /var/api
+            sudo chown $USER:$USER /var/api
+          fi
+          cd /var/api
+
+          # Clonar o repositório se ainda não estiver clonado
+          if [ ! -d /var/api/LearningTDD ]; then
+            git clone https://github.com/usuario/repositorio.git LearningTDD
+          fi
+
+          # Navegar para o diretório do repositório
+          cd /var/api/LearningTDD
+
+          # Puxar as últimas alterações do repositório
+          git pull origin main
+
           # Construir e executar o Docker container na VM
-          sudo docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
+          sudo docker build -t learningtdd:latest -f LearningTDD/learningtdd/Dockerfile LearningTDD/learningtdd
           sudo docker stop learningtdd || true
           sudo docker rm learningtdd || true
-          ${{ secrets.DOCKER_RUN }}
+          sudo docker run -d --name learningtdd learningtdd:latest

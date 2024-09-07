@@ -49,13 +49,13 @@ jobs:
 
           # Clonar o repositório se ainda não estiver clonado
           if [ ! -d /var/api/LearningTDD ]; then
-            git clone https://github.com/Fekler/learningtdd.git LearningTDD
+            sudo git clone https://github.com/Fekler/learningtdd.git LearningTDD
           fi
 
           # Navegar para o diretório do repositório
 
           # Puxar as últimas alterações do repositório
-          git pull origin main
+          sudo git pull origin main
 
           # Construir e executar o Docker container na VM
           sudo docker build -t learningtdd:latest -f LearningTDD/learningtdd/Dockerfile LearningTDD/learningtdd

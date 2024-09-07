@@ -1,9 +1,6 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -13,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout do código
+    - name: Checkout do cÃ³digo
       uses: actions/checkout@v3
 
     - name: Configurar o .NET
@@ -21,44 +18,54 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Set Environment Variables
-      run: echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
-
-    - name: Restaurar dependências
-      run: dotnet restore
+    - name: Restaurar dependÃªncias
+      run: dotnet restore ./LearningTDD/LearningTDD.sln
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build --no-restore --configuration Release ./LearningTDD/LearningTDD.sln
 
     - name: Testar
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --configuration Release --verbosity normal ./LearningTDD/LearningTDD.sln
 
-    - name: Buildar a imagem Docker
-      run: docker build -t ghcr.io/${{ github.repository }}/learningTdd:latest .
+    - name: Configurar variÃ¡veis de ambiente
+      run: |
+        echo "ENVIRONMENT=Development" >> $GITHUB_ENV
+        echo "ConnectionStrings__DefaultConnection=${{ secrets.CONNECTION_STRING }}" >> $GITHUB_ENV
 
-    - name: Push da imagem para o GitHub Packages
-      run: docker push ghcr.io/${{ github.repository }}/learningTdd:latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Arquivar artefatos de build
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-artifacts
+        path: |
+          ./LearningTDD/bin/Release
+          ./LearningTDD/Dockerfile
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
+    - name: Baixar artefatos de build
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifacts
+
     - name: Deploy para a VM via SSH
-      uses: appleboy/ssh-action@v0.1.17
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
         script: |
-          # Atualizar a imagem Docker
-          docker pull ghcr.io/${{ github.repository }}/learningTdd:latest
-
-          # Parar e remover o container existente, se houver
-          docker stop learningTdd || true
-          docker rm learningTdd || true
-
-          # Rodar o novo container
-          docker run -d -p 8080:8080  --name learningTdd --network tdd_network ghcr.io/${{ github.repository }}/learningTdd:latest
+          echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u Fekler --password-stdin
+          
+          # Copiar artefatos de build
+          mkdir -p ~/build-artifacts
+          cp -r build-artifacts/* ~/build-artifacts/
+          
+          # Construir e executar o Docker container na VM
+          sudo docker build -t ghcr.io/fekler/learningtdd/learningtdd:latest -f ~/build-artifacts/Dockerfile ~/build-artifacts
+          sudo docker stop learningtdd || true
+          sudo docker rm learningtdd || true
+          ${{ secrets.DOCKER_RUN }}

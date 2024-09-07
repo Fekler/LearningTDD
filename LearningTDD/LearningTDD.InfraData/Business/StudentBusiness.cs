@@ -34,6 +34,7 @@ namespace LearningTDD.InfraData.Business
                     result.Success = true;
                     result.Data = id;
                     result.Message = $"{nameof(Student)} {Constants.AddedSuccessfully}";
+                    result.ErrorCode = 8;
                 }
 
             }

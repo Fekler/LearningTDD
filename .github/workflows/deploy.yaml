@@ -45,15 +45,14 @@ jobs:
             sudo mkdir -p /var/api
             sudo chown $USER:$USER /var/api
           fi
-          cd /var/api
+          cd /var/api/LearningTDD
 
           # Clonar o repositório se ainda não estiver clonado
           if [ ! -d /var/api/LearningTDD ]; then
-            git clone https://github.com/usuario/repositorio.git LearningTDD
+            git clone https://github.com/Fekler/learningtdd.git LearningTDD
           fi
 
           # Navegar para o diretório do repositório
-          cd /var/api/LearningTDD
 
           # Puxar as últimas alterações do repositório
           git pull origin main
